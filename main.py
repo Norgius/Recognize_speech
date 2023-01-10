@@ -10,10 +10,10 @@ bot.
 """
 
 import logging
-
 from environs import Env
-from telegram import Update, ForceReply
+from telegram import Update
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext
+from google.cloud import dialogflow
 
 
 logging.basicConfig(
@@ -28,6 +28,7 @@ logger = logging.getLogger(__name__)
 # context.
 def start(update: Update, context: CallbackContext) -> None:
     update.message.reply_text('Здравствуйте')
+    
 
 
 def help_command(update: Update, context: CallbackContext) -> None:
@@ -36,7 +37,35 @@ def help_command(update: Update, context: CallbackContext) -> None:
 
 
 def echo(update: Update, context: CallbackContext) -> None:
-    update.message.reply_text(update.message.text)
+    # update.message.reply_text(update.message.text)
+    env = Env()
+    env.read_env()
+    project_id = env.str('PROJECT_ID')
+    session_id = env.str('TELEGRAM_ID')
+    answer = detect_intent_texts(project_id, session_id, update.message.text, 'ru-RU')
+    update.message.reply_text(answer)
+
+
+def detect_intent_texts(project_id, session_id, text, language_code):
+    session_client = dialogflow.SessionsClient()
+
+    session = session_client.session_path(project_id, session_id)
+
+    text_input = dialogflow.TextInput(text=text, language_code=language_code)
+    query_input = dialogflow.QueryInput(text=text_input)
+    response = session_client.detect_intent(
+        request={"session": session, "query_input": query_input}
+    )
+    print("=" * 20)
+    print("Query text: {}".format(response.query_result.query_text))
+    print(
+        "Detected intent: {} (confidence: {})\n".format(
+            response.query_result.intent.display_name,
+            response.query_result.intent_detection_confidence,
+        )
+    )
+    print("Fulfillment text: {}\n".format(response.query_result.fulfillment_text))
+    return response.query_result.fulfillment_text
 
 
 def main() -> None:
@@ -44,10 +73,8 @@ def main() -> None:
     env.read_env()
     telegram_token = env.str('SPEECH_BOT_TOKEN_TELEGRAM')
     updater = Updater(telegram_token)
-
     # Get the dispatcher to register handlers
     dispatcher = updater.dispatcher
-
     # on different commands - answer in Telegram
     dispatcher.add_handler(CommandHandler("start", start))
     dispatcher.add_handler(CommandHandler("help", help_command))

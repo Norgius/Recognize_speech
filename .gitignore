@@ -9,6 +9,7 @@ app.log*
 
 # Distribution / packaging
 .Python
+google-cloud-sdk/
 build/
 develop-eggs/
 dist/
