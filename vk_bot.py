@@ -1,9 +1,9 @@
 import logging
 import uuid
 from time import sleep
-from environs import Env
 from random import randint
 
+from environs import Env
 from telegram import Bot
 import vk_api as vk
 from vk_api.longpoll import VkLongPoll, VkEventType

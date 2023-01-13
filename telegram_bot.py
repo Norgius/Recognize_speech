@@ -1,8 +1,8 @@
 import uuid
 import logging
-from environs import Env
 from time import sleep
 
+from environs import Env
 from telegram import Update, Bot
 from telegram.ext import Updater, CommandHandler, MessageHandler
 from telegram.ext import Filters, CallbackContext
