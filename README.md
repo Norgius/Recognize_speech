@@ -2,7 +2,7 @@
 Данный проект позволяет запускать ботов для 2-х платформ: `VK` и `Telegram`.
 Боты обучены на платформе `DialogFlow`.!
 
-![[Пример работы Telegram бота](https://user-images.githubusercontent.com/101505413/212481633-320b499d-4081-40ea-b32e-2e8183a445e7.gif)
+![Пример работы Telegram бота](https://user-images.githubusercontent.com/101505413/212482218-04e2f05e-19ae-4270-901a-1136c8e75861.gif)
 
 ![Пример работы VK бота](https://user-images.githubusercontent.com/101505413/212480747-1dd7fac4-add8-4d7d-8ff3-fefffe4da7f4.gif)
 
