@@ -31,10 +31,10 @@ def reply_to_message(update: Update, context: CallbackContext) -> None:
         )
         update.message.reply_text(answer)
     except NetworkError as netword_error:
-        logger.warning(f'Ошибка сети телеграмм бота\n{netword_error}\n')
+        logger.warning(f'Ошибка сети телеграм бота\n{netword_error}\n')
         sleep(20)
     except TelegramError as telegram_error:
-        logger.warning(f'Ошибка телеграмм бота\n{telegram_error}\n')
+        logger.warning(f'Ошибка телеграм бота\n{telegram_error}\n')
 
 
 def main() -> None:
@@ -58,7 +58,7 @@ def main() -> None:
     dispatcher.add_handler(
         MessageHandler(Filters.text & ~Filters.command, reply_to_message)
     )
-    logger.info('Запуск телеграмм бота')
+    logger.info('Запуск телеграм бота')
     while True:
         speech_bot.start_polling()
         speech_bot.idle()
