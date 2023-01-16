@@ -43,9 +43,9 @@ def main():
     with open('questions.json', 'r') as file:
         training_phrases = json.loads(file.read())
 
-    for intent_name, value in training_phrases.items():
-        questions = value.get('questions')
-        answer = [value.get('answer')]
+    for intent_name, phrases in training_phrases.items():
+        questions = phrases.get('questions')
+        answer = [phrases.get('answer')]
         create_intent(project_id, intent_name, questions, answer)
 
 
