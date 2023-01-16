@@ -1,6 +1,6 @@
-import uuid
 import logging
 from time import sleep
+from functools import partial
 
 from environs import Env
 from telegram import Update, Bot
@@ -20,11 +20,10 @@ def start(update: Update, context: CallbackContext) -> None:
     )
 
 
-def reply_to_message(update: Update, context: CallbackContext) -> None:
-    env = Env()
-    env.read_env()
-    project_id = env.str('PROJECT_ID')
+def reply_to_message(update: Update, context: CallbackContext,
+                     project_id) -> None:
     session_id = f'tg-{update.effective_user.id}'
+
     try:
         answer = detect_intent_texts(
             project_id, session_id, update.message.text, RUS_LANGUAGE_CODE
@@ -42,6 +41,7 @@ def main() -> None:
     env.read_env()
     speech_bot_token = env.str('SPEECH_BOT_TELEGRAM_TOKEN')
     person_id = env.str('PERSON_ID')
+    project_id = env.str('PROJECT_ID')
     error_log_bot_token = env.str('ERROR_LOG_BOT_TOKEN')
 
     error_log_bot = Bot(error_log_bot_token)
@@ -56,7 +56,10 @@ def main() -> None:
     dispatcher = speech_bot.dispatcher
     dispatcher.add_handler(CommandHandler("start", start))
     dispatcher.add_handler(
-        MessageHandler(Filters.text & ~Filters.command, reply_to_message)
+        MessageHandler(
+            Filters.text & ~Filters.command,
+            partial(reply_to_message, project_id=project_id)
+        )
     )
     logger.info('Запуск телеграм бота')
     while True:
