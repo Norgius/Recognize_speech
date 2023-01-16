@@ -16,7 +16,7 @@ class TelegramLogsHandler(logging.Handler):
 
 
 def detect_intent_texts(project_id, session_id, text,
-                        language_code, only_correct_text=False):
+                        language_code):
     session_client = dialogflow.SessionsClient()
     session = session_client.session_path(project_id, session_id)
 
@@ -25,7 +25,4 @@ def detect_intent_texts(project_id, session_id, text,
     response = session_client.detect_intent(
         request={"session": session, "query_input": query_input}
     )
-    unclear = response.query_result.intent.is_fallback
-    if only_correct_text and unclear:
-        return
-    return response.query_result.fulfillment_text
+    return response.query_result

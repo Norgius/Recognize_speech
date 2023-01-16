@@ -21,15 +21,12 @@ logger = logging.getLogger(__name__)
 
 
 def reply_to_message(event, vk_api, project_id, session_id):
-    only_correct_text = True
     answer = detect_intent_texts(
-        project_id, session_id, event.text,
-        RUS_LANGUAGE_CODE, only_correct_text
-    )
-    if answer:
+        project_id, session_id, event.text, RUS_LANGUAGE_CODE)
+    if not answer.intent.is_fallback:
         vk_api.messages.send(
             user_id=event.user_id,
-            message=answer,
+            message=answer.fulfillment_text,
             random_id=randint(1, 100000)
         )
 
