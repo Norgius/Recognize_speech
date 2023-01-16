@@ -13,10 +13,6 @@ from utils import TelegramLogsHandler, detect_intent_texts
 
 RUS_LANGUAGE_CODE = 'ru-RU'
 
-logging.basicConfig(
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    level=logging.INFO
-)
 logger = logging.getLogger(__name__)
 
 
