@@ -24,12 +24,12 @@ def reply_to_message(update: Update, context: CallbackContext) -> None:
     env = Env()
     env.read_env()
     project_id = env.str('PROJECT_ID')
-    session_id = str(uuid.uuid4())
+    session_id = f'tg-{update.effective_user.id}'
     try:
         answer = detect_intent_texts(
             project_id, session_id, update.message.text, RUS_LANGUAGE_CODE
         )
-        update.message.reply_text(answer)
+        update.message.reply_text(answer.fulfillment_text)
     except NetworkError as netword_error:
         logger.warning(f'Ошибка сети телеграм бота\n{netword_error}\n')
         sleep(20)

@@ -16,7 +16,8 @@ RUS_LANGUAGE_CODE = 'ru-RU'
 logger = logging.getLogger(__name__)
 
 
-def reply_to_message(event, vk_api, project_id, session_id):
+def reply_to_message(event, vk_api, project_id):
+    session_id = f'vk-{event.user_id}'
     answer = detect_intent_texts(
         project_id, session_id, event.text, RUS_LANGUAGE_CODE)
     if not answer.intent.is_fallback:
@@ -53,7 +54,7 @@ def main():
         try:
             for event in longpoll.listen():
                 if event.type == VkEventType.MESSAGE_NEW and event.to_me:
-                    reply_to_message(event, vk_api, project_id, session_id)
+                    reply_to_message(event, vk_api, project_id)
         except ReadTimeout as timeout:
             logger.warning(f'Превышено время ожидания VK бота\n{timeout}\n')
         except ConnectionError as connect_er:
