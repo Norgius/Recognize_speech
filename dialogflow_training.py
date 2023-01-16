@@ -45,8 +45,7 @@ def main():
 
     for intent_name, value in training_phrases.items():
         questions = value.get('questions')
-        answer = []
-        answer.append(value.get('answer'))
+        answer = [value.get('answer')]
         create_intent(project_id, intent_name, questions, answer)
 
 
