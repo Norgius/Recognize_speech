@@ -1,4 +1,5 @@
 import json
+import argparse
 
 from environs import Env
 from google.cloud import dialogflow
@@ -40,9 +41,16 @@ def main():
     env = Env()
     env.read_env()
     project_id = env.str('PROJECT_ID')
-    with open('questions.json', 'r') as file:
-        training_phrases = json.loads(file.read())
+    parser = argparse.ArgumentParser(
+        description='''Обучает dialogflow фразам, которые \
+                       записаны в json-файле'''
+    )
+    parser.add_argument('-f', default='questions.json',
+                        help='укажите путь к json-файлу')
+    args = parser.parse_args()
 
+    with open(args.f, 'r') as file:
+        training_phrases = json.loads(file.read())
     for intent_name, phrases in training_phrases.items():
         questions = phrases.get('questions')
         answer = [phrases.get('answer')]
